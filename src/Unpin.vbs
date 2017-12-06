@@ -10,12 +10,6 @@ programData = objShell.ExpandEnvironmentStrings("%ProgramData%")
 
 Set sho = CreateObject("Shell.Application")
 
-' Namespaces that do not work for IE or File Explorer
-' - "shell:AppsFolder"
-' - "C:\Program Files (x86)", ProgramFiles = objShell.ExpandEnvironmentStrings("%ProgramFiles%")
-' - "C:\Program Files", ProgramFilesX86 = objShell.ExpandEnvironmentStrings("%ProgramFiles(x86)%")
-
-
 Set folder = sho.Namespace(userProfilePath + "\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar")
 processNamespace(folder)
 
@@ -31,7 +25,7 @@ Function processNamespace(folder)
 	For Each shellFolderItem In folder.Items
 	  If unwanted(shellFolderItem.Name) Then
 		' For debugging, uncomment the call to 'showVerbs' below:
-		call showVerbs(shellFolderItem)
+		' call showVerbs(shellFolderItem)
 		call unpin(shellFolderItem)
 	  End If
 	Next

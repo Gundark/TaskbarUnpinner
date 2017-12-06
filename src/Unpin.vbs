@@ -3,20 +3,39 @@
 ' Based on Stefan Hofbauer's code from https://pinto10blog.wordpress.com/2016/09/10/pinto10/
 
 
+Set objShell = CreateObject("WScript.Shell")
+userProfilePath = objShell.ExpandEnvironmentStrings("%UserProfile%")
+programData = objShell.ExpandEnvironmentStrings("%ProgramData%")
+
+
 Set sho = CreateObject("Shell.Application")
-Set folder = sho.Namespace("shell:AppsFolder")
 
-For Each shellFolderItem In folder.Items
-  If unwanted(shellFolderItem.Name) Then
-    ' For debugging, uncomment the call to 'showVerbs' below:
-    ' call showVerbs(shellFolderItem)
-    call unpin(shellFolderItem)
-  End If
-Next
+' Namespaces that do not work for IE or File Explorer
+' - "shell:AppsFolder"
+' - "C:\Program Files (x86)", ProgramFiles = objShell.ExpandEnvironmentStrings("%ProgramFiles%")
+' - "C:\Program Files", ProgramFilesX86 = objShell.ExpandEnvironmentStrings("%ProgramFiles(x86)%")
 
+
+Set folder = sho.Namespace(userProfilePath + "\AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar")
+processNamespace(folder)
+
+' For some unknown reason, the namespace above doesn't work for File Explorer, but this namespace does.
+
+Set folder = sho.Namespace(programData + "\Microsoft\Windows\Start Menu Places")
+processNamespace(folder)
 
 
 ' Functions ----------------------------------------------------------------------------------
+
+Function processNamespace(folder)
+	For Each shellFolderItem In folder.Items
+	  If unwanted(shellFolderItem.Name) Then
+		' For debugging, uncomment the call to 'showVerbs' below:
+		call showVerbs(shellFolderItem)
+		call unpin(shellFolderItem)
+	  End If
+	Next
+End Function
 
 
 Function unwanted(itemName)
@@ -64,7 +83,7 @@ Function showVerbs(shellFolderItem)
   Set verbList = shellFolderItem.Verbs()
   
   displayString = shellFolderItem.Name & vbCrLf _
-				  & vbCrLf & "Available Verbs" & vbCrLf & "------------------------"
+				  & vbCrLf & "Available Verbs" & vbCrLf & "------------------------" & vbCrLf & shellFolderItem.Path
 				  
   For Each verb In verbList
     displayString = displayString & vbCrLf & "  - " & verb.Name
@@ -75,5 +94,3 @@ Function showVerbs(shellFolderItem)
   
   MsgBox(displayString)
 End Function
-
-

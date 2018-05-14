@@ -14,14 +14,16 @@ Notes:
     at login time:  https://www.computerhope.com/issues/ch000322.htm
 
 3.  The sample code that inspiring this uses the namespace "shell:AppsFolder".  It turned out this didn't work 
-	for either IE or File Explorer.  Neither do "C:\Program Files (x86)", or "C:\Program Files", because the verb
-	list doesn't contain the 'Unpin from taskbar' verb.
-	
+    for either IE or File Explorer.  Neither do "C:\Program Files (x86)", or "C:\Program Files", because the verb
+    list doesn't contain the 'Unpin from taskbar' verb.
+
 4.  On my laptop, if I pin Internet Explorer to the taskbar, the 'shell:AppsFolder' namespace works.
     But for the default pinned IE icon created by my company's provisioning package at login time, it doesn't work
     because the 'unpin from taskbar' verb is not available, either through the GUI or the shellFolderItem.Verbs() 
-	method, even though IE is visibly pinned.
+    method, even though IE is visibly pinned.
 
 5.  In the end, I had to use two different namespaces to pick up all of the programs; there was no
-	single namespace that worked for all.
+    single namespace that worked for all.
 
+6.  A request was made to unpin Microsoft Edge and Microsoft Store, if present.  I found that the Shell:Appsfolder contained
+    the necessary verbs for both, so I added it back in.  See bullet #3.

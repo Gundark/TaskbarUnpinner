@@ -18,6 +18,12 @@ processNamespace(folder)
 Set folder = sho.Namespace(programData + "\Microsoft\Windows\Start Menu Places")
 processNamespace(folder)
 
+' This namespace should work for MS Store and MS Edge.
+
+Set folder = sho.Namespace("shell:AppsFolder")
+processNamespace(folder)
+
+
 
 ' Functions ----------------------------------------------------------------------------------
 
@@ -39,7 +45,9 @@ Function unwanted(itemName)
        stringContains(itemName, "Excel 2013") OR _
        stringContains(itemName, "Outlook 2013") OR _
        stringContains(itemName, "Internet Explorer") OR _
-       stringContains(itemName, "File Explorer") Then
+       stringContains(itemName, "File Explorer") OR _
+       stringContains(itemName, "Microsoft Edge") OR _
+       stringContains(itemName, "Microsoft Store") Then
 
         unwanted = true
     End If
